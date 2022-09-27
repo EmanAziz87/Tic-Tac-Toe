@@ -1,0 +1,32 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.board {
+    width: 600px;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.quadrant {
+    height: 150px;
+    background-color: antiquewhite;
+    flex-basis: 33.3%;
+    border: 1px solid black;
+}
+
+.quadrant:hover {
+    background-color: aqua;
+}
