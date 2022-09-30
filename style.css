@@ -9,6 +9,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+    gap: 50px;
+    background-color: rgb(200, 229, 255);
 }
 
 .board {
@@ -21,12 +24,23 @@ body {
 }
 
 .quadrant {
+    font-family: sans-serif;
+    font-size: 5rem;
     height: 150px;
-    background-color: antiquewhite;
+    background-color: rgb(181, 226, 212);
     flex-basis: 33.3%;
     border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .quadrant:hover {
-    background-color: aqua;
+    background-color: rgb(193, 250, 232);
+}
+
+.game-info-text {
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: sans-serif;
 }

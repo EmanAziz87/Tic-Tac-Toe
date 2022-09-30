@@ -1,6 +1,6 @@
 'use strict';
 
-// takes chosen quadrant as parameter and pushes it to a player array
+const headerInfoText = document.querySelector('.game-info-text');
 let playerOneChoices = [];
 let playerTwoChoices = [];
 let gameOver = false;
@@ -9,23 +9,46 @@ const players = (name) => {
     return { name };
 };
 
-const playerOne = players('Eman');
-const playerTwo = players('joe');
+const playerOneChooseName = prompt('Player One, please choose your name');
+const playerTwoChooseName = prompt('Player Two, please choose your name');
 
-// eventlistener for quadrant click retrieves number of quadrant through
-// class name and passes it to the gameBoard function to be added to the
-// array.
+const playerOne = players(playerOneChooseName);
+const playerTwo = players(playerTwoChooseName);
+headerInfoText.textContent = `${playerOne.name}'s Turn`;
+
+const displayController = () => {
+    let playerChoice = true;
+    const allQuadrant = document.querySelectorAll('.quadrant');
+
+    allQuadrant.forEach((quadrant) => {
+        quadrant.addEventListener('click', () => {
+            if (quadrant.textContent == '') {
+                if (playerChoice && !gameOver) {
+                    quadrant.textContent = 'X';
+                    playerChoice = false;
+                    headerInfoText.textContent = `${playerTwo.name}'s Turn`;
+                } else if (!playerChoice && !gameOver) {
+                    quadrant.textContent = 'O';
+                    playerChoice = true;
+                    headerInfoText.textContent = `${playerOne.name}'s Turn`;
+                }
+            }
+        });
+    });
+};
 
 const makeMove = (() => {
     const allQuadrant = document.querySelectorAll('.quadrant');
     let chosenQuadrant = 0;
 
     const pushValues = (quadrantNumChoice, playerChoices, playerName) => {
-        playerChoices.push(quadrantNumChoice);
-        console.log(winCondition(playerChoices, playerName));
+        if (!playerChoices.includes(quadrantNumChoice)) {
+            playerChoices.push(quadrantNumChoice);
+            winCondition(playerChoices, playerName);
+        }
     };
 
-    const storeQuadrantValues = () => {
+    const storeQuadrantNumValue = () => {
         allQuadrant.forEach((quadrant) => {
             quadrant.addEventListener('click', (event) => {
                 const tempArr = event.target.classList[0].split('-');
@@ -40,29 +63,8 @@ const makeMove = (() => {
         });
     };
 
-    return { storeQuadrantValues };
+    return { storeQuadrantNumValue };
 })();
-
-// Alternatingly adds textContent X or O on a quadrant when clicked
-// depending on playerChoice boolean value.
-const displayController = () => {
-    let playerChoice = true;
-    const allQuadrant = document.querySelectorAll('.quadrant');
-
-    allQuadrant.forEach((quadrant) => {
-        quadrant.addEventListener('click', () => {
-            if (quadrant.textContent == '') {
-                if (playerChoice && !gameOver) {
-                    quadrant.textContent = 'X';
-                    playerChoice = false;
-                } else if (!playerChoice && !gameOver) {
-                    quadrant.textContent = 'O';
-                    playerChoice = true;
-                }
-            }
-        });
-    });
-};
 
 function winCondition(playerChoicesArray, playerName) {
     const wins = [
@@ -76,31 +78,25 @@ function winCondition(playerChoicesArray, playerName) {
         [7, 5, 3],
     ];
 
-    // checks if win condition arrays match values with the player choice
-    // array that was passed as a parameter.
     if (!gameOver) {
         for (const winCondition of wins) {
             let crossAchieved = 0;
+
             for (const choice of playerChoicesArray) {
                 for (let i = 0; i < 3; i++) {
                     if (winCondition[i] == choice) {
-                        // if values a number matched, increase the
-                        // cross achieved variable by 1, If it reaches 3,
-                        // someone won!
                         crossAchieved++;
                     }
 
                     if (crossAchieved == 3) {
                         gameOver = true;
-                        return `${playerName} won!`;
+                        headerInfoText.textContent = `${playerName} won!`;
                     }
                 }
             }
         }
-        // returns crossAchieved
-        return 'Keep going...';
     }
 }
 
 displayController();
-makeMove.storeQuadrantValues();
+makeMove.storeQuadrantNumValue();
